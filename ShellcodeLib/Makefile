@@ -1,14 +1,20 @@
 CC=gcc
-CFLAGS= -fPIC -static -Os -fdata-sections -ffunction-sections --entry=_start -Wl,-Tscript.ld -c
-export SOURCES:=$(wildcard *.c)
-export OUTPUT+=$(patsubst %.c,%.so,$(SOURCES))
+CFLAGS= -fPIC -static -Os -fdata-sections -ffunction-sections -nostdlib --entry=_start -Wl,-Tlinkerscript.ld
+# export SOURCES:=$(wildcard *.c)
+# export OUTPUT+=$(patsubst %.c,%.so,$(SOURCES))
 
 .PHONY: all clean build
 
-all: clean build
+all: clean shellcode.bin
 
-build:
-	$(CC) $(CFLAGS) -o $(OUTPUT) $(SOURCES)
+%.o: %.c
+	$(CC) $(CFLAGS) -c $<
+
+shellcode.elf: shellcode.o
+	$(CC) $(CFLAGS) -o $@ $^
+
+shellcode.bin: shellcode.elf
+	objcopy -j raw_shellcode -O binary $^ $@
 
 clean:
-	rm -f $(OUTPUT) 2>/dev/null
+	rm -f *.so *.o shellcode.elf shellcode.bin 2>/dev/null

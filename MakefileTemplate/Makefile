@@ -5,12 +5,16 @@ define allow-override
     $(eval $(1) = $(2)))
 endef
 
+TOOL_PREFIX=
+CC=$(TOOL_PREFIX)gcc
+LD=$(TOOL_PREFIX)LD
 
+ifdef TOOL_PREFIX
 $(call allow-override,CC,$(CC))
 $(call allow-override,LD,$(LD))
+endif
 
 CDEBUG=-g
-CC?=gcc
 CFLAGS=
 
 BINARY=main

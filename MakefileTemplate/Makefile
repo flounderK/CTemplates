@@ -7,7 +7,7 @@ endef
 
 TOOL_PREFIX=
 CC=$(TOOL_PREFIX)gcc
-LD=$(TOOL_PREFIX)LD
+LD=$(TOOL_PREFIX)ld
 
 ifdef TOOL_PREFIX
 $(call allow-override,CC,$(CC))

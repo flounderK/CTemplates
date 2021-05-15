@@ -15,21 +15,21 @@ $(call allow-override,LD,$(LD))
 endif
 
 CDEBUG=-g
-CFLAGS=
+CFLAGS=-g
 
 BINARY=main
 
-.PHONY: all clean
+.PHONY: all clean tests
 
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
+all: clean $(BINARY)
 
-all: $(BINARY)
-
-$(BINARY): test.o
+$(BINARY): main.o
 	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
-	rm -f $(BINARY) *.o *.so 2>/dev/null
+	find . -type d \( -path include \) -prune -false -o -iname '*.o' -o -iname '*.so' | xargs rm -f
+	rm -f $(BINARY) 2>/dev/null

@@ -41,9 +41,8 @@ int main(int argc, char* argv[]){
     printf("[+] PID: %d\n\n", pid);
 
     int (*start)() = mapped_addr;
-    start();
+    ret = start();
 
-    ret = 0;
 exit:
     return ret;
 }

@@ -5,7 +5,7 @@ CFLAGS= -fPIC -static -Os -fdata-sections -ffunction-sections -nostdlib --entry=
 
 .PHONY: all clean
 
-all: clean shellcode.bin shellcode_head.bin
+all: clean shellcode.bin
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
@@ -16,8 +16,8 @@ shellcode.elf: shellcode.o
 shellcode.bin: shellcode.elf
 	objcopy -j raw_shellcode -O binary $^ $@
 
-shellcode_head.bin: shellcode_head.o
-	objcopy -j raw_shellcode -O binary $^ $@
+# shellcode_head.bin: shellcode_head.o
+# 	objcopy -j raw_shellcode -O binary $^ $@
 
 clean:
-	rm -f *.so *.o shellcode.elf shellcode_head.elf shellcode_head.bin shellcode.bin 2>/dev/null
+	rm -f *.so *.o shellcode.elf shellcode_head.elf shellcode.bin 2>/dev/null

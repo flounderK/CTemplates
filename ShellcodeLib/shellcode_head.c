@@ -29,10 +29,8 @@ static inline long _syscall(long a, long b, long c, long d)
 //Make sure to use static const arrays if you use any arrays, otherwise gcc might decide to add a
 //call to memcpy
 //
-int (*_jump_ptr)() = 0xabad1dea;
 
 void _start(void)
 {
 
-    (&(*_jump_ptr)+sizeof(size_t))();
 }

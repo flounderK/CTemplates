@@ -6,6 +6,7 @@ SECTIONS
 		*(.rodata._start*)
 		*(.text*)
 		*(.data*)
+		*(.rodata*)
 	}
 	_end = .;
 }

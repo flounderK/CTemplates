@@ -14,6 +14,7 @@ size_t _syscall(size_t number, ...);
 #define _poll(ufds, nfds, timeout_msecs) _syscall(__NR_poll, ufds, nfds, timeout_msecs)
 #define _lseek(fd, offset, whence) _syscall(__NR_lseek, fd, offset, whence)
 #define _mprotect(start, len, prot) _syscall(__NR_mprotect, start, len, prot)
+#define _mmap(addr, len, prot, flags, fd, offset) _syscall(__NR_mmap, addr, len, prot, flags, fd, offset)
 #define _munmap(addr, len) _syscall(__NR_munmap, addr, len)
 #define _brk(brk) _syscall(__NR_brk, brk)
 #define _rt_sigprocmask(how, nset, oset, sigsetsize) _syscall(__NR_rt_sigprocmask, how, nset, oset, sigsetsize)

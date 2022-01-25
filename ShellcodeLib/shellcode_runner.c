@@ -39,6 +39,7 @@ int main(int argc, char* argv[]){
 
     pid_t pid = getpid();
     printf("[+] PID: %d\n\n", pid);
+    printf("Mapped at %p\n", mapped_addr);
 
     int (*start)() = mapped_addr;
     ret = start();

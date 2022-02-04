@@ -1,5 +1,22 @@
-CC=gcc
-CFLAGS= -fPIC -static -Os -fdata-sections -ffunction-sections -Iinclude -nostdlib --entry=_start -Wl,-Tlinkerscript.ld
+CC=clang
+BFD_LFLAGS=-Wl,-Tlinkerscript.ld
+# specifying lto level here allows the usage of size optimization
+# (-Os) and full link time optimization (-flto=full) in CFLAGS
+# These options together make a smaller bin and also
+# actually removing unnecessary rel/rela entries like ld.bfd does by default
+LLD_LFLAGS=-Wl,-Tlinkerscript.ld,--pie,--gc-sections,--lto-O3
+# LFLAGS=-Wl,-Tlinkerscript.ld,--pie,--gc-sections,--no-check-sections
+LLD_CFLAGS=-fuse-ld=lld -flto=full
+BFD_CFLAGS=
+COMMON_CFLAGS=-fPIC -static -Os \
+		-fdata-sections \
+		-ffunction-sections \
+		-Iinclude \
+		-nostdlib
+
+# CFLAGS= $(BFD_CFLAGS) $(COMMON_CFLAGS) $(BFD_LFLAGS)
+CFLAGS= $(LLD_CFLAGS) $(COMMON_CFLAGS) $(LLD_LFLAGS)
+
 # export SOURCES:=$(wildcard *.c)
 # export OUTPUT+=$(patsubst %.c,%.so,$(SOURCES))
 

@@ -1,0 +1,8 @@
+obj/**
+lib/**
+build/**
+*.o
+*.bin
+*.elf
+*.so
+*.swp

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include "projectname.h"
+#include "debug_utils.h"
 
 int main(int argc, char* argv[]){
     int ret = -1;

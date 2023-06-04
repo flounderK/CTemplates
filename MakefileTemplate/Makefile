@@ -15,10 +15,15 @@ $(call allow-override,LD,$(LD))
 endif
 
 CDEBUG=-g
-CFLAGS=-g
+CFLAGS=-g -Iinclude -Isrc
 
 BINARY=main
+
 OBJ=build
+
+OBJECTS += src/main.o
+
+OBJECT_FILES=$(addprefix $(OBJ)/, $(OBJECTS))
 
 .PHONY: all clean tests
 
@@ -29,7 +34,7 @@ $(OBJ)/%.o: %.c
 
 all: clean $(BINARY)
 
-$(BINARY): $(OBJ)/src/main.o
+$(BINARY): $(OBJECT_FILES)
 	$(CC) $(CFLAGS) -o $@ $^
 
 clean:

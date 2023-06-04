@@ -18,18 +18,21 @@ CDEBUG=-g
 CFLAGS=-g
 
 BINARY=main
+OBJ=build
 
 .PHONY: all clean tests
 
 
-%.o: %.c
+$(OBJ)/%.o: %.c
+	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 all: clean $(BINARY)
 
-$(BINARY): main.o
+$(BINARY): $(OBJ)/src/main.o
 	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
+	rm -rf $(OBJ) 2>/dev/null
 	find . -type d \( -path include \) -prune -false -o -iname '*.o' -o -iname '*.so' | xargs rm -f
 	rm -f $(BINARY) 2>/dev/null

@@ -14,30 +14,55 @@ $(call allow-override,CC,$(CC))
 $(call allow-override,LD,$(LD))
 endif
 
-CDEBUG=-g
-CFLAGS=-g -Iinclude -Isrc
+CDEBUG=-g -O0
+CFLAGS=-Iinclude -Isrc
 
 BINARY=main
 
-OBJ=build
+BUILD_DIR=build
+DEBUG_DIR=debug
+RELEASE_DIR=release
+OBJ=$(BUILD_DIR)
 
 OBJECTS += src/main.o
 
-OBJECT_FILES=$(addprefix $(OBJ)/, $(OBJECTS))
+RELEASE_OBJECT_FILES=$(addprefix $(OBJ)/release/, $(OBJECTS))
+DBG_OBJECT_FILES=$(addprefix $(OBJ)/debug/, $(OBJECTS))
 
-.PHONY: all clean tests
+.PHONY: all clean tests debug release
 
+all: debug release
 
+$(OBJ)/$(DEBUG_DIR)/%.o: CFLAGS += $(CDEBUG)
+$(OBJ)/$(DEBUG_DIR)/%.o: %.c
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJ)/$(RELEASE_DIR)/%.o: %.c
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+# currently unused target
 $(OBJ)/%.o: %.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-all: clean $(BINARY)
-
+# old unused target
 $(BINARY): $(OBJECT_FILES)
 	$(CC) $(CFLAGS) -o $@ $^
 
+$(OBJ)/$(DEBUG_DIR)/$(BINARY): $(DBG_OBJECT_FILES)
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) $(CDEBUG) -o $@ $^
+
+debug: $(OBJ)/$(DEBUG_DIR)/$(BINARY)
+
+$(OBJ)/$(RELEASE_DIR)/$(BINARY): $(RELEASE_OBJECT_FILES)
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -o $@ $^
+
+release: $(OBJ)/$(RELEASE_DIR)/$(BINARY)
+
 clean:
 	rm -rf $(OBJ) 2>/dev/null
-	find . -type d \( -path include \) -prune -false -o -iname '*.o' -o -iname '*.so' | xargs rm -f
 	rm -f $(BINARY) 2>/dev/null

@@ -1,0 +1,20 @@
+function(set_kconfig_vars_from_file FILENAME)
+    # Optional Kconfig integration
+    if(EXISTS "${FILENAME}")
+        file(READ "${FILENAME}" KCONFIG_CONTENTS)
+        string(REGEX MATCHALL "CONFIG_[A-Za-z0-9_]+=(y|n)" KCONFIG_LINES "${KCONFIG_CONTENTS}")
+        foreach(line ${KCONFIG_LINES})
+
+            message("${line}")
+            string(REPLACE "=" ";" line_parts ${line})
+            list(GET line_parts 0 VAR)
+            list(GET line_parts 1 VAL)
+            if(VAL STREQUAL "y")
+                set(${VAR} ON CACHE INTERNAL "${VAR}")
+            else()
+                set(${VAR} OFF CACHE INTERNAL "${VAR}")
+            endif()
+        endforeach()
+    endif()
+endfunction()
+
